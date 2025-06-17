@@ -99,6 +99,8 @@ struct ContentView: View {
         } catch {
             predictedScore = "Error"
         }
+        
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
