@@ -5,6 +5,7 @@
 //  Created by Gurur on 17.06.2025.
 //
 
+import CoreML
 import SwiftUI
 
 struct ContentView: View {
@@ -56,7 +57,7 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    Button(action: {}) {
+                    Button(action: predict) {
                         Text("Predict Final Score")
                     }
                 }
@@ -74,7 +75,32 @@ struct ContentView: View {
     }
     
     func predict() {
-        // placeholder
+        // 1. Validate and get input
+        guard let previousScoreDouble = Double(previousScore) else {
+            predictedScore = "Invalid Score"
+            return
+        }
+        let participation = participationLevels[participationIndex]
+        
+        // 2. Create the model instance
+        do {
+            let config = MLModelConfiguration()
+            let model = try StudentScorePredictor(configuration: config)
+            
+            let prediction = try model.prediction( // Make the prediction
+                    study_hours: studyHours,
+                    attendance_rate: attendanceRate,
+                    previous_scores: previousScoreDouble,
+                    participation_level: participation,
+                    sleep_hours: sleepHours
+                )
+            
+            // 4. Update the UI
+            let finalScore = prediction.final_score
+            predictedScore = String(format: "%2.f", finalScore)
+        } catch {
+            predictedScore = "Error"
+        }
     }
 }
 
