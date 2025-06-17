@@ -65,8 +65,6 @@ struct ContentView: View {
                 if !predictedScore.isEmpty {
                     Section("Result") {
                         Text("Predicted Final Score: \(predictedScore)")
-                            .font(.title2)
-                            .fontWeight(.bold)
                     }
                 }
             }
