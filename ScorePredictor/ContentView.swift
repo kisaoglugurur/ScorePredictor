@@ -8,14 +8,73 @@
 import SwiftUI
 
 struct ContentView: View {
+    // State variables to hold user input
+    @State private var studyHours: Double = 10.0
+    @State private var attendanceRate: Double = 75
+    @State private var previousScore: String = "80"
+    @State private var participationIndex: Int = 1 // Index for "Medium"
+    @State private var sleepHours = 7.0
+    
+    // For the Picker
+    let participationLevels: [String] = ["Low", "Medium", "High"]
+    
+    // To hold the prediction result
+    @State private var predictedScore: String = ""
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            Form {
+                Section("Student Information") {
+                    // Slider for study hours
+                    VStack {
+                        Text("Study Hours: \(studyHours, specifier: "%.1f")")
+                        Slider(value: $studyHours, in: 0...30, step: 0.5)
+                    }
+                    
+                    // Slider for attendance rate
+                    VStack {
+                        Text("Attendance Rate: \(attendanceRate, specifier: "%.0f")%")
+                        Slider(value: $attendanceRate, in: 0...100, step: 1)
+                    }
+                    
+                    // TextField for previous score
+                    TextField("Previous Exam Score", text: $previousScore)
+                        .keyboardType(.decimalPad)
+                    
+                    // Picker for Participation Level
+                    Picker("Participation Level", selection: $participationIndex) {
+                        ForEach(participationLevels.indices, id: \.self) { index in
+                            Text(self.participationLevels[index])
+                        }
+                    }
+
+                    // Slider for Sleep Hours
+                    VStack {
+                        Text("Sleep Hours: \(sleepHours, specifier: "%.1f")")
+                        Slider(value: $sleepHours, in: 4...10, step: 0.5)
+                    }
+                }
+                
+                Section {
+                    Button(action: {}) {
+                        Text("Predict Final Score")
+                    }
+                }
+                
+                if !predictedScore.isEmpty {
+                    Section("Result") {
+                        Text("Predicted Final Score: \(predictedScore)")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                    }
+                }
+            }
+            .navigationTitle("Score Predictor")
         }
-        .padding()
+    }
+    
+    func predict() {
+        // placeholder
     }
 }
 
